@@ -5,19 +5,19 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
-@Path("page")
-public class PageResource {
+@Path("admin")
+public class AdminResource {
 
 	@GET
-	public Response mainPage() {
+	public Response adminPage() {
 
-		return Response.ok("This is the current main page !").build();
+		return Response.ok("This is the admin page !").build();
 	}
 
 	@Path("{pageName}")
 	@GET
 	public Response specialPage(@PathParam("pageName") String pageName) {
 
-		return Response.ok("This is page " + pageName + " !").build();
+		return Response.ok("This is admin page " + pageName + " !").build();
 	}
 }
