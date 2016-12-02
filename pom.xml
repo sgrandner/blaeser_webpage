@@ -1,56 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>blaeser</groupId>
-  <artifactId>blaeser</artifactId>
-  <packaging>war</packaging>
-  <version>1.0</version>
-  <name>blaeser</name>
+	<modelVersion>4.0.0</modelVersion>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.6</maven.compiler.source>
-    <maven.compiler.target>1.6</maven.compiler.target>
-	  <failOnMissingWebXml>false</failOnMissingWebXml>
-  </properties>
+	<groupId>com.blaeser</groupId>
+	<artifactId>stack</artifactId>
+	<packaging>war</packaging>
+	<version>1.0</version>
+	<url>http://maven.apache.org</url>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.jboss.spec</groupId>
-      <artifactId>jboss-javaee-6.0</artifactId>
-      <version>1.0.0.Final</version>
-      <type>pom</type>
-      <scope>provided</scope>
-    </dependency>
-  </dependencies>
+	<name>stack</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!--<maven.compiler.source>1.6</maven.compiler.source>-->
+		<!--<maven.compiler.target>1.6</maven.compiler.target>-->
+		<failOnMissingWebXml>false</failOnMissingWebXml>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.annotation</groupId>
+			<artifactId>javax.annotation-api</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>1.1.0.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.ws.rs</groupId>
+			<artifactId>javax.ws.rs-api</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glassfish.jersey.core</groupId>
+			<artifactId>jersey-common</artifactId>
+			<version>2.13</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.core</groupId>
+			<artifactId>jersey-server</artifactId>
+			<version>2.13</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.core</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>2.13</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.containers</groupId>
+			<artifactId>jersey-container-servlet-core</artifactId>
+			<version>2.13</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.containers</groupId>
+			<artifactId>jersey-container-servlet</artifactId>
+			<version>2.13</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glassfish.jersey.bundles.repackaged</groupId>
+			<artifactId>jersey-guava</artifactId>
+			<version>2.13</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glassfish.hk2.external</groupId>
+			<artifactId>javax.inject</artifactId>
+			<version>2.3.0-b10</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.hk2.external</groupId>
+			<artifactId>aopalliance-repackaged</artifactId>
+			<version>2.3.0-b10</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.hk2</groupId>
+			<artifactId>hk2-api</artifactId>
+			<version>2.3.0-b10</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.hk2</groupId>
+			<artifactId>hk2-utils</artifactId>
+			<version>2.3.0-b10</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.hk2</groupId>
+			<artifactId>hk2-locator</artifactId>
+			<version>2.3.0-b10</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.hk2</groupId>
+			<artifactId>osgi-resource-locator</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.18.1-GA</version>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.40</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.persistence</groupId>
+			<artifactId>persistence-api</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>javax.persistence</artifactId>
+			<version>2.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>3.2.0.cr2</version>
+		</dependency>
+	</dependencies>
 
 	<build>
-		<finalName>blaeser</finalName>
+		<finalName>stack</finalName>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.5</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.2</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 
-  <profiles>
-    <profile>
-     <!-- When built in OpenShift the 'openshift' profile will be used when invoking mvn. -->
-     <!-- Use this profile for any OpenShift specific customization your app will need. -->
-     <!-- By default that is to put the resulting archive into the 'deployments' folder. -->
-     <!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
-     <id>openshift</id>
-     <build>
-        <finalName>blaeser</finalName>
-        <plugins>
-          <plugin>
-            <artifactId>maven-war-plugin</artifactId>
-            <version>2.1.1</version>
-            <configuration>
-              <outputDirectory>deployments</outputDirectory>
-              <warName>ROOT</warName>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
+	<!-- profiles for openshift and such stuff ?!?! -->
+	<!--<profiles>-->
+		<!--<profile>-->
+			<!--&lt;!&ndash; When built in OpenShift the 'openshift' profile will be used when invoking mvn. &ndash;&gt;-->
+			<!--&lt;!&ndash; Use this profile for any OpenShift specific customization your app will need. &ndash;&gt;-->
+			<!--&lt;!&ndash; By default that is to put the resulting archive into the 'deployments' folder. &ndash;&gt;-->
+			<!--&lt;!&ndash; http://maven.apache.org/guides/mini/guide-building-for-different-environments.html &ndash;&gt;-->
+			<!--<id>openshift</id>-->
+			<!--<build>-->
+				<!--<finalName>blaeser</finalName>-->
+				<!--<plugins>-->
+					<!--<plugin>-->
+						<!--<artifactId>maven-war-plugin</artifactId>-->
+						<!--<version>2.1.1</version>-->
+						<!--<configuration>-->
+							<!--<outputDirectory>deployments</outputDirectory>-->
+							<!--<warName>ROOT</warName>-->
+						<!--</configuration>-->
+					<!--</plugin>-->
+				<!--</plugins>-->
+			<!--</build>-->
+		<!--</profile>-->
+	<!--</profiles>-->
 
 </project>

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="blaeser_webpage:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="stack.war">
+      <element id="artifact" artifact-name="blaeser_webpage:war exploded" />
+    </root>
+  </artifact>
+</component>

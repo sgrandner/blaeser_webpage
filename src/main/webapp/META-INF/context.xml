@@ -1,0 +1,14 @@
+<Context docBase="/Users/sgrandner/Documents/privat/workspaceWeb/blaeser_webpage/src/main/webapp"
+		 path="/blaeser_webpage" reloadable="true">
+
+	<Resource name="jdbc/TestDB"
+			  auth="Container"
+			  type="javax.sql.DataSource"
+			  maxActive="100"
+			  maxIdle="30"
+			  maxWait="10000"
+			  username="testuser"
+			  password="testpassword"
+			  driverClassName="com.mysql.jdbc.Driver"
+			  url="jdbc:mysql://localhost:3307/blaeser" />
+</Context>
