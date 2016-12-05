@@ -4,15 +4,11 @@
 			 xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
  			 http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd" version="1.0">
 
-	<persistence-unit name="my-pu">
-		<description>My Persistence Unit</description>
-		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		<jta-data-source>java:/DefaultDS</jta-data-source>
-		<properties>
-			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
-			<property name="hibernate.hbm2ddl.auto" value="create-drop"/>
-		</properties>
-	</persistence-unit>
+	<!--<persistence-unit name="my-pu">-->
+		<!--<description>My Persistence Unit</description>-->
+		<!--<jta-data-source>jdbc/blaeser</jta-data-source>-->
+		<!--<class>com.blaeser.models.Page</class>-->
+	<!--</persistence-unit>-->
 
 	<!--<persistence-unit name="my-pu">-->
 		<!--<description>My Persistence Unit</description>-->
