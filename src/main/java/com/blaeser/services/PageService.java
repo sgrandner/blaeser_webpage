@@ -12,37 +12,37 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-@Stateless
+//@Stateless
 public class PageService {
 
-	@PersistenceContext()
-	private EntityManager entityManager;
+//	@PersistenceContext()
+//	private EntityManager entityManager;
 
-	public List<Page> getAll() {
-
-		Query query = entityManager.createQuery(
-				"SELECT p.id, p.name" +
-				"FROM pages AS p" +
-				"WHERE p.id > 1");
-
-//		query.setParameter('1', "1");
-
-		List<?> tempResultList = query.getResultList();
-		Iterator<?> iterator = tempResultList.iterator();
-
-		List<Page> resultList = new ArrayList<>();
-
-		while (iterator.hasNext()) {
-
-			Object[] row = (Object[]) iterator.next();
-
-			Page tempPage = new Page();
-			tempPage.setId((Integer) row[0]);
-			tempPage.setName((String) row[1]);
-
-			resultList.add(tempPage);
-		}
-
-		return resultList;
-	}
+//	public List<Page> getAll() {
+//
+//		Query query = entityManager.createQuery(
+//				"SELECT p.id, p.name" +
+//				"FROM pages AS p" +
+//				"WHERE p.id > 1");
+//
+////		query.setParameter('1', "1");
+//
+//		List<?> tempResultList = query.getResultList();
+//		Iterator<?> iterator = tempResultList.iterator();
+//
+//		List<Page> resultList = new ArrayList<>();
+//
+//		while (iterator.hasNext()) {
+//
+//			Object[] row = (Object[]) iterator.next();
+//
+//			Page tempPage = new Page();
+//			tempPage.setId((Integer) row[0]);
+//			tempPage.setName((String) row[1]);
+//
+//			resultList.add(tempPage);
+//		}
+//
+//		return resultList;
+//	}
 }
