@@ -29,7 +29,10 @@ public class PageResource {
 	@Path("{pageName}")
 	public Response specialPage(@PathParam("pageName") String pageName) {
 
-		return Response.ok("This is page " + pageName + " !").build();
+		PageService pageService = new PageService();
+		String pageString = pageService.createPage(pageName);
+
+		return Response.ok(pageString).build();
 	}
 
 	@GET
@@ -52,7 +55,7 @@ public class PageResource {
 			conn = ds.getConnection();
 			st = conn.createStatement();
 
-			rs = st.executeQuery("SELECT * FROM pages");
+			rs = st.executeQuery("SELECT * FROM page");
 
 			sb.append("Hier gibts einige Daten:<br><br>");
 
@@ -68,7 +71,7 @@ public class PageResource {
 
 			sb.append("<br/><br/>");
 
-			rs = st.executeQuery("SELECT name, creationDate FROM pages WHERE creationDate > '2016-11-01 00:00:00'");
+			rs = st.executeQuery("SELECT name, creationDate FROM page WHERE creationDate > '2016-11-01 00:00:00'");
 
 			while(rs.next()) {
 
