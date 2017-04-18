@@ -1,5 +1,6 @@
 package com.blaeser.services;
 
+import com.blaeser.models.Content;
 import com.blaeser.models.ContentImage;
 import com.blaeser.models.ContentText;
 import com.blaeser.models.Page;
@@ -11,7 +12,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -143,20 +146,26 @@ public class PageService {
 		sb.append(template);
 
 		// add more patterns if needed (each pattern needs one numeric group (back reference))
-		List<Pattern> patterns = new ArrayList<Pattern>();
-		patterns.add(Pattern.compile("\\{image([0-9])+}"));
-//		TODO patterns.add(Pattern.compile("\\{text([0-9])+}"));
+		Map<Integer, Pattern> patternsMap = new HashMap<>();
+		patternsMap.put(0, Pattern.compile("\\{image([0-9])+}"));
+		patternsMap.put(1, Pattern.compile("\\{text([0-9])+}"));
 
-		for(Pattern p : patterns) {
+		for(Integer key : patternsMap.keySet()) {
 
-			Matcher matcher = p.matcher(sb);
+			Matcher matcher = patternsMap.get(key).matcher(sb);
 
 			while(matcher.find()) {
 
 				try {
-					// TODO sbResult as temporary stringbuffer needed ?
 					final int index = Integer.parseInt(matcher.group(1));
-					matcher.appendReplacement(sbResult, images.get(index - 1).getFileName());	// TODO
+					switch (key) {
+						case 0:
+							matcher.appendReplacement(sbResult, images.get(index - 1).getFileName());
+							break;
+						case 1:
+							matcher.appendReplacement(sbResult, texts.get(index - 1).getContent());
+							break;
+					}
 				}
 				catch (Exception ex) {
 					ex.printStackTrace();
@@ -165,9 +174,10 @@ public class PageService {
 
 			matcher.appendTail(sbResult);
 
-			// TODO check this (copy back to sb)
+			// TODO check this -> sbResult as temporary stringbuffer needed ?
 			sb.setLength(0);
 			sb.append(sbResult);
+			sbResult.setLength(0);
 		}
 
 		return sb.toString();

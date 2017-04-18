@@ -1,6 +1,6 @@
 package com.blaeser.models;
 
-public class ContentText {
+public class ContentText implements Content {
 
 	private int id;
 	private String content;

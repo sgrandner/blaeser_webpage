@@ -1,6 +1,6 @@
 package com.blaeser.models;
 
-public class ContentImage {
+public class ContentImage implements Content {
 
 	private int id;
 	private String fileName;
