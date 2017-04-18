@@ -147,8 +147,8 @@ public class PageService {
 
 		// add more patterns if needed (each pattern needs one numeric group (back reference))
 		Map<Integer, Pattern> patternsMap = new HashMap<>();
-		patternsMap.put(0, Pattern.compile("\\{image([0-9])+}"));
-		patternsMap.put(1, Pattern.compile("\\{text([0-9])+}"));
+		patternsMap.put(0, Pattern.compile("\\{text([0-9])+\\.([a-zA-Z0-9_-]+)}"));
+		patternsMap.put(1, Pattern.compile("\\{image([0-9])+\\.([a-zA-Z0-9_-]+)}"));
 
 		for(Integer key : patternsMap.keySet()) {
 
@@ -158,12 +158,30 @@ public class PageService {
 
 				try {
 					final int index = Integer.parseInt(matcher.group(1));
+					final String parameter = matcher.group(2);
 					switch (key) {
 						case 0:
-							matcher.appendReplacement(sbResult, images.get(index - 1).getFileName());
+							switch (parameter) {
+								case "content":
+									matcher.appendReplacement(sbResult, texts.get(index - 1).getContent());
+									break;
+							}
 							break;
 						case 1:
-							matcher.appendReplacement(sbResult, texts.get(index - 1).getContent());
+							switch (parameter) {
+								case "fileName":
+									matcher.appendReplacement(sbResult, images.get(index - 1).getFileName());
+									break;
+								case "width":
+									matcher.appendReplacement(sbResult, Integer.toString(images.get(index - 1).getWidth()));
+									break;
+								case "height":
+									matcher.appendReplacement(sbResult, Integer.toString(images.get(index - 1).getHeight()));
+									break;
+								case "description":
+									matcher.appendReplacement(sbResult, images.get(index - 1).getDescription());
+									break;
+							}
 							break;
 					}
 				}
