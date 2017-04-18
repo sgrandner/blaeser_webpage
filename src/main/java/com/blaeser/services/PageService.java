@@ -6,7 +6,6 @@ import com.blaeser.models.Page;
 
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
-import javax.swing.text.html.parser.Parser;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,7 +27,7 @@ public class PageService {
 
 //			sb.append(page.getTemplate());
 //			sb.append("<br>");
-//			sb.append(page.getImages().get(0).getImageData());
+//			sb.append(page.getImages().get(0).getFileName());
 //			sb.append("<br>");
 //			sb.append(page.getImages().get(0).getDescription());
 //			sb.append("<br>");
@@ -93,7 +92,7 @@ public class PageService {
 
 				ContentImage image = new ContentImage();
 				image.setId(rs.getInt("id"));
-				image.setImageData(rs.getString("imageData"));
+				image.setFileName(rs.getString("fileName"));
 				image.setWidth(rs.getInt("width"));
 				image.setHeight(rs.getInt("height"));
 				image.setDescription(rs.getString("description"));
@@ -157,7 +156,7 @@ public class PageService {
 				try {
 					// TODO sbResult as temporary stringbuffer needed ?
 					final int index = Integer.parseInt(matcher.group(1));
-					matcher.appendReplacement(sbResult, images.get(index - 1).getImageData());	// TODO
+					matcher.appendReplacement(sbResult, images.get(index - 1).getFileName());	// TODO
 				}
 				catch (Exception ex) {
 					ex.printStackTrace();

@@ -3,7 +3,7 @@ package com.blaeser.models;
 public class ContentImage {
 
 	private int id;
-	private String imageData;
+	private String fileName;
 	private int width;
 	private int height;
 	private String description;
@@ -16,12 +16,12 @@ public class ContentImage {
 		this.id = id;
 	}
 
-	public String getImageData() {
-		return imageData;
+	public String getFileName() {
+		return fileName;
 	}
 
-	public void setImageData(String imageData) {
-		this.imageData = imageData;
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 	public int getWidth() {
