@@ -6,12 +6,15 @@ import com.blaeser.models.Page;
 
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
+import javax.swing.text.html.parser.Parser;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PageService {
 
@@ -23,14 +26,16 @@ public class PageService {
 
 		if(page != null) {
 
-			sb.append(page.getTemplate());
-			sb.append("<br>");
-			sb.append(page.getImages().get(0).getImageData());
-			sb.append("<br>");
-			sb.append(page.getImages().get(0).getDescription());
-			sb.append("<br>");
-			sb.append(page.getTexts().get(0).getContent());
-			sb.append("<br>");
+//			sb.append(page.getTemplate());
+//			sb.append("<br>");
+//			sb.append(page.getImages().get(0).getImageData());
+//			sb.append("<br>");
+//			sb.append(page.getImages().get(0).getDescription());
+//			sb.append("<br>");
+//			sb.append(page.getTexts().get(0).getContent());
+//			sb.append("<br>");
+
+			sb.append(insertContent(page.getTemplate(), page.getImages(), page.getTexts()));
 		}
 
 		return sb.toString();
@@ -129,5 +134,43 @@ public class PageService {
 		}
 
 		return page;
+	}
+
+	private String insertContent(String template, List<ContentImage> images, List<ContentText> texts) {
+
+		StringBuffer sb = new StringBuffer();
+		StringBuffer sbResult = new StringBuffer();
+
+		sb.append(template);
+
+		// add more patterns if needed (each pattern needs one numeric group (back reference))
+		List<Pattern> patterns = new ArrayList<Pattern>();
+		patterns.add(Pattern.compile("\\{image([0-9])+}"));
+//		TODO patterns.add(Pattern.compile("\\{text([0-9])+}"));
+
+		for(Pattern p : patterns) {
+
+			Matcher matcher = p.matcher(sb);
+
+			while(matcher.find()) {
+
+				try {
+					// TODO sbResult as temporary stringbuffer needed ?
+					final int index = Integer.parseInt(matcher.group(1));
+					matcher.appendReplacement(sbResult, images.get(index - 1).getImageData());	// TODO
+				}
+				catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+
+			matcher.appendTail(sbResult);
+
+			// TODO check this (copy back to sb)
+			sb.setLength(0);
+			sb.append(sbResult);
+		}
+
+		return sb.toString();
 	}
 }
