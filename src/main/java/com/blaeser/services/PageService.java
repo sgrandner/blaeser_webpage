@@ -85,7 +85,7 @@ public class PageService {
 					"INNER JOIN image AS i " +
 					"ON pc.refid = i.id " +
 					"WHERE pc.pageId = " + page.getId() + " " +
-					"AND pc.type = 0 ");
+					"AND pc.type = 1 ");
 
 			List images = new ArrayList<ContentImage>();
 
@@ -108,7 +108,7 @@ public class PageService {
 					"INNER JOIN text AS t " +
 					"ON pc.refid = t.id " +
 					"WHERE pc.pageId = " + page.getId() + " " +
-					"AND pc.type = 1");
+					"AND pc.type = 0");
 			
 			List texts = new ArrayList<ContentText>();
 
