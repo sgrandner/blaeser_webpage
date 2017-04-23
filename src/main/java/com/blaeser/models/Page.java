@@ -15,6 +15,7 @@ public class Page {
 	private String template;
 	private List<ContentImage> images;
 	private List<ContentText> texts;
+	private String html;
 
 	public int getId() {
 		return id;
@@ -87,5 +88,13 @@ public class Page {
 
 	public void setTexts(List<ContentText> texts) {
 		this.texts = texts;
+	}
+
+	public String getHtml() {
+		return html;
+	}
+
+	public void setHtml(String html) {
+		this.html = html;
 	}
 }

@@ -1,6 +1,5 @@
 package com.blaeser.services;
 
-import com.blaeser.models.Content;
 import com.blaeser.models.ContentImage;
 import com.blaeser.models.ContentText;
 import com.blaeser.models.Page;
@@ -20,27 +19,26 @@ import java.util.regex.Pattern;
 
 public class PageService {
 
-	public String createPage(String pageName) {
-
-		StringBuffer sb = new StringBuffer();
+	public Page createPage(String pageName) {
 
 		Page page = getPageData(pageName);
 
 		if(page != null) {
 
-//			sb.append(page.getTemplate());
-//			sb.append("<br>");
-//			sb.append(page.getImages().get(0).getFileName());
-//			sb.append("<br>");
-//			sb.append(page.getImages().get(0).getDescription());
-//			sb.append("<br>");
-//			sb.append(page.getTexts().get(0).getContent());
-//			sb.append("<br>");
-
+			StringBuffer sb = new StringBuffer();
 			sb.append(insertContent(page.getTemplate(), page.getImages(), page.getTexts()));
+
+			page.setHtml(sb.toString());
 		}
 
-		return sb.toString();
+		return page;
+	}
+
+	public String createMenu(Integer pageId) {
+
+
+
+		return null;
 	}
 
 	private Page getPageData(String pageName) {

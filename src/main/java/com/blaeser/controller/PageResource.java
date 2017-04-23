@@ -3,13 +3,11 @@ package com.blaeser.controller;
 import com.blaeser.models.Page;
 import com.blaeser.services.PageService;
 
-import javax.inject.Inject;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -30,9 +28,13 @@ public class PageResource {
 	public Response specialPage(@PathParam("pageName") String pageName) {
 
 		PageService pageService = new PageService();
-		String pageString = pageService.createPage(pageName);
 
-		return Response.ok(pageString).build();
+		Page page = pageService.createPage(pageName);
+		int pageId = page.getId();
+
+		String menuString = pageService.createMenu(pageId);
+
+		return Response.ok(page.getHtml()).build();
 	}
 
 	@GET
@@ -93,18 +95,4 @@ public class PageResource {
 
 		return Response.ok(sb.toString()).build();
 	}
-
-//	@GET
-//	@Path("getpages")
-//	@Produces("application/json")
-//	public Response getPages() {
-//
-//		String pageString = "";
-//
-//		for(Page page : pageService.getAll()) {
-//			pageString += "id: " + page.getId() + ", name: " + page.getName();
-//		}
-//
-//		return Response.ok(pageString).build();
-//	}
 }
