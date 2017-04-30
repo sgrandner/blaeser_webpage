@@ -19,9 +19,13 @@ import java.util.regex.Pattern;
 
 public class PageService {
 
-	public Page createPage(String pageName) {
+	public Page createPage(Integer pageId) {
 
-		Page page = getPageData(pageName);
+		if(pageId == null) {
+			return null;
+		}
+
+		Page page = getPageData(pageId);
 
 		if(page != null) {
 
@@ -34,14 +38,57 @@ public class PageService {
 		return page;
 	}
 
-	public String createMenu(Integer pageId) {
+	public Page createPage(String pageName) {
 
+		Integer pageId = getPageIdByPageName(pageName);
 
+		if(pageId != null) {
+			return createPage(pageId);
+		}
 
-		return "";
+		return null;
 	}
 
-	private Page getPageData(String pageName) {
+	private Integer getPageIdByPageName(String pageName) {
+
+		Connection conn = null;
+		Statement st = null;
+		ResultSet rs = null;
+		Integer pageId = null;
+
+		try {
+			InitialContext ctx = new InitialContext();
+			DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/TestDB");
+
+			// This works too
+			// Context envCtx = (Context) ctx.lookup("java:comp/env");
+			// DataSource ds = (DataSource) envCtx.lookup("jdbc/TestDB");
+
+			conn = ds.getConnection();
+			st = conn.createStatement();
+
+			// TODO check page.active here as well !?!
+			rs = st.executeQuery("SELECT p.id " +
+					"FROM page AS p " +
+					"WHERE p.name = '" + pageName + "'");
+
+			while (rs.next()) {
+				pageId = rs.getInt("id");
+			}
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		finally {
+			try { if (rs != null) rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+			try { if (st != null) st.close(); } catch (SQLException e) { e.printStackTrace(); }
+			try { if (conn != null) conn.close(); } catch (SQLException e) { e.printStackTrace(); }
+		}
+
+		return pageId;
+	}
+
+	private Page getPageData(int pageId) {
 
 		Connection conn = null;
 		Statement st = null;
@@ -65,7 +112,7 @@ public class PageService {
 					"FROM page AS p " +
 					"INNER JOIN page_template AS pt " +
 					"ON p.templateId = pt.id " +
-					"WHERE p.name = '" + pageName + "' " +
+					"WHERE p.id = " + pageId + " " +
 					"AND p.active = 1 ");
 
 			while (rs.next()) {

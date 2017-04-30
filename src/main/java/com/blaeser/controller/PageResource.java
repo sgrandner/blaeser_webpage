@@ -1,6 +1,8 @@
 package com.blaeser.controller;
 
+import com.blaeser.models.Menu;
 import com.blaeser.models.Page;
+import com.blaeser.services.MenuService;
 import com.blaeser.services.PageService;
 import org.glassfish.jersey.server.mvc.Viewable;
 
@@ -15,6 +17,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 
 @Path("page")
 public class PageResource {
@@ -27,18 +31,40 @@ public class PageResource {
 	}
 
 	@GET
-	@Path("{pageName}")
+	@Path("{menuName}")
 	@Produces("text/html")
-	public Viewable getPage(@PathParam("pageName") String pageName) {
+	public Viewable getPageByMenuName(@PathParam("menuName") String menuName) {
+
+		MenuService menuService = new MenuService();
+		PageService pageService = new PageService();
+
+		Menu menu = menuService.createMenu(menuName);
+		Page page = pageService.createPage(menu.getPageId());
+
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		modelMap.put("menu", menu);
+		modelMap.put("page", page);
+
+		// TODO case page == null !!!
+
+		return new Viewable("/page", modelMap);
+	}
+
+	@GET
+	@Path("p/{pageName}")
+	@Produces("text/html")
+	public Viewable getPageByPageName(@PathParam("pageName") String pageName) {
 
 		PageService pageService = new PageService();
 
 		Page page = pageService.createPage(pageName);
-		int pageId = page.getId();
 
-		String menuString = pageService.createMenu(pageId);
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		modelMap.put("page", page);
 
-		return new Viewable("/page");
+		// TODO case page == null !!!
+
+		return new Viewable("/page", modelMap);
 	}
 
 	@GET

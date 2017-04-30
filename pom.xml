@@ -17,13 +17,7 @@
 		<!-- NOTE javax libs (javax.ws.rs-api) are provided by glassfish.jersey libs ! -->
 		<!-- NOTE do not use glassfish.jersey and com.sun.jersey in one project ! -->
 
-		<!--org.glassfish.jersey-->
-		<dependency>
-			<groupId>org.glassfish.jersey.containers</groupId>
-			<!-- if your container implements Servlet API older than 3.0, use "jersey-container-servlet-core"  -->
-			<artifactId>jersey-container-servlet</artifactId>
-			<version>2.25.1</version>
-		</dependency>
+		<!-- org.glassfish.jersey including jsp -->
 		<!-- Required only when you are using JAX-RS Client -->
 		<dependency>
 			<groupId>org.glassfish.jersey.core</groupId>
@@ -37,10 +31,15 @@
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
+			<!-- if your container implements Servlet API older than 3.0, use "jersey-container-servlet-core"  -->
+			<artifactId>jersey-container-servlet</artifactId>
+			<version>2.25.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-servlet-core</artifactId>
 			<version>2.25.1</version>
 		</dependency>
-
 		<dependency>
 			<!-- NOTE exclude servlet-api in this lib if Tomcat 8 is used (lib is provided by Tomcat 8 whereas this one does not work !) -->
 			<!--      -> see IntelliJ -> Maven Projects -> Show Dependencies -->
@@ -60,7 +59,20 @@
 			<version>2.25.1</version>
 		</dependency>
 
-		<!--org.glassfish.hk2-->
+		<!-- jstl (JavaServer Pages Standard Tag Library) -->
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<!--<dependency>-->
+			<!-- NOTE does not work !-->
+			<!--<groupId>javax.servlet.jsp.jstl</groupId>-->
+			<!--<artifactId>jstl-api</artifactId>-->
+			<!--<version>1.2</version>-->
+		<!--</dependency>-->
+
+		<!-- org.glassfish.hk2 -->
 		<dependency>
 			<groupId>org.glassfish.hk2.external</groupId>
 			<artifactId>javax.inject</artifactId>
@@ -92,21 +104,21 @@
 			<version>1.0.1</version>
 		</dependency>
 
-		<!--org.javassist-->
+		<!-- org.javassist -->
 		<dependency>
 			<groupId>org.javassist</groupId>
 			<artifactId>javassist</artifactId>
 			<version>3.18.1-GA</version>
 		</dependency>
 
-		<!--mysql-->
+		<!-- mysql -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.40</version>
 		</dependency>
 
-		<!--persistence-->
+		<!-- persistence -->
 		<dependency>
 			<groupId>javax.persistence</groupId>
 			<artifactId>persistence-api</artifactId>
