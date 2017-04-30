@@ -16,7 +16,7 @@ public class AdminResource {
 
 	@Path("{pageName}")
 	@GET
-	public Response specialPage(@PathParam("pageName") String pageName) {
+	public Response getPage(@PathParam("pageName") String pageName) {
 
 		return Response.ok("This is admin page " + pageName + " !").build();
 	}

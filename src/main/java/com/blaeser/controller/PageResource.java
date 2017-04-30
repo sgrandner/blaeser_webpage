@@ -2,12 +2,14 @@ package com.blaeser.controller;
 
 import com.blaeser.models.Page;
 import com.blaeser.services.PageService;
+import org.glassfish.jersey.server.mvc.Viewable;
 
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -18,6 +20,7 @@ import java.sql.Statement;
 public class PageResource {
 
 	@GET
+	@Produces("text/html")
 	public Response mainPage() {
 
 		return Response.ok("This is the mainpage.").build();
@@ -25,7 +28,8 @@ public class PageResource {
 
 	@GET
 	@Path("{pageName}")
-	public Response specialPage(@PathParam("pageName") String pageName) {
+	@Produces("text/html")
+	public Viewable getPage(@PathParam("pageName") String pageName) {
 
 		PageService pageService = new PageService();
 
@@ -34,7 +38,7 @@ public class PageResource {
 
 		String menuString = pageService.createMenu(pageId);
 
-		return Response.ok(page.getHtml()).build();
+		return new Viewable("/page");
 	}
 
 	@GET

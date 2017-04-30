@@ -38,7 +38,7 @@ public class PageService {
 
 
 
-		return null;
+		return "";
 	}
 
 	private Page getPageData(String pageName) {

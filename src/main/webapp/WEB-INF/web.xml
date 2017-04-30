@@ -13,4 +13,23 @@
 		<res-auth>Container</res-auth>
 	</resource-ref>
 
+	<!-- NOTE use servlet-filter instead of servlet if using jsp from Jersey -->
+	<filter>
+		<filter-name>Jersey</filter-name>
+		<filter-class>org.glassfish.jersey.servlet.ServletContainer</filter-class>
+		<init-param>
+			<param-name>javax.ws.rs.Application</param-name>
+			<param-value>com.blaeser.controller.JAXRSConfiguration</param-value>
+		</init-param>
+		<!--<init-param>-->
+			<!--<param-name>jersey.config.servlet.filter.forwardOn404</param-name>-->
+			<!--<param-value>true</param-value>-->
+		<!--</init-param>-->
+	</filter>
+
+	<filter-mapping>
+		<filter-name>Jersey</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
 </web-app>
