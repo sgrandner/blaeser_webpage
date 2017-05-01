@@ -1,7 +1,9 @@
 package com.blaeser.controller;
 
+import com.blaeser.models.ColumnType;
 import com.blaeser.models.Menu;
 import com.blaeser.models.Page;
+import com.blaeser.services.DbQuery;
 import com.blaeser.services.MenuService;
 import com.blaeser.services.PageService;
 import org.glassfish.jersey.server.mvc.Viewable;
@@ -71,57 +73,31 @@ public class PageResource {
 	@Path("/data")
 	public Response dataPage() {
 
-		Connection conn = null;
-		Statement st = null;
-		ResultSet rs = null;
 		StringBuffer sb = new StringBuffer();
 
-		try {
-			InitialContext ctx = new InitialContext();
-			DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/TestDB");
+		DbQuery dbQuery = new DbQuery();
+		Map<String, ColumnType> columnTypeMap = new HashMap<>();
 
-			// This works too
-			// Context envCtx = (Context) ctx.lookup("java:comp/env");
-			// DataSource ds = (DataSource) envCtx.lookup("jdbc/TestDB");
+		// first data set
+		columnTypeMap.clear();
+		columnTypeMap.put("id", ColumnType.INT);
+		columnTypeMap.put("name", ColumnType.STRING);
+		columnTypeMap.put("active", ColumnType.BOOLEAN);
+		columnTypeMap.put("creationDate", ColumnType.DATE);
 
-			conn = ds.getConnection();
-			st = conn.createStatement();
+		dbQuery.executeStatement("SELECT * FROM page", columnTypeMap);
 
-			rs = st.executeQuery("SELECT * FROM page");
+		sb.append(dbQuery.toString());
+		sb.append("<br/><br/>");
 
-			sb.append("Hier gibts einige Daten:<br><br>");
+		// second data set
+		columnTypeMap.clear();
+		columnTypeMap.put("name", ColumnType.STRING);
+		columnTypeMap.put("creationDate", ColumnType.DATE);
 
-			while (rs.next()) {
+		dbQuery.executeStatement("SELECT name, creationDate FROM page WHERE creationDate > '2016-11-01 00:00:00'", columnTypeMap);
 
-				String id = rs.getString("id");
-				String name = rs.getString("name");
-				String active = rs.getString("active");
-				String creationDate = rs.getString("creationDate");
-
-				sb.append("id: " + id + ", name: " + name + ", active: " + active + ", creationDate: " + creationDate + "<br/>");
-			}
-
-			sb.append("<br/><br/>");
-
-			rs = st.executeQuery("SELECT name, creationDate FROM page WHERE creationDate > '2016-11-01 00:00:00'");
-
-			while(rs.next()) {
-
-				String name = rs.getString("name");
-				String creationDate = rs.getString("creationDate");
-
-				sb.append("name: " + name + ", creationDate: " + creationDate + "<br/>");
-
-			}
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		finally {
-			try { if (rs != null) rs.close(); } catch (SQLException e) { e.printStackTrace(); }
-			try { if (st != null) st.close(); } catch (SQLException e) { e.printStackTrace(); }
-			try { if (conn != null) conn.close(); } catch (SQLException e) { e.printStackTrace(); }
-		}
+		sb.append(dbQuery.toString());
 
 		return Response.ok(sb.toString()).build();
 	}

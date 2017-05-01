@@ -1,6 +1,10 @@
 package com.blaeser.services;
 
+import com.blaeser.models.ColumnType;
 import com.blaeser.models.Menu;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MenuService {
 
@@ -22,14 +26,28 @@ public class MenuService {
 
 	private Menu getMenuData(String menuName) {
 
-		// TODO get pageId for menuName from db
-
 		Menu menu = new Menu();
 
-		menu.setId(1);
-		menu.setLabel("Über uns");
-		menu.setPageId(2);
-		menu.setActive(true);
+		DbQuery dbQuery = new DbQuery();
+		Map<String, ColumnType> columnTypeMap = new HashMap<>();
+
+		columnTypeMap.clear();
+		columnTypeMap.put("id", ColumnType.INT);
+		columnTypeMap.put("label", ColumnType.STRING);
+		columnTypeMap.put("pageId", ColumnType.INT);
+		columnTypeMap.put("active", ColumnType.BOOLEAN);
+
+		dbQuery.executeStatement("SELECT m.id, m.label, m.pageId, m.active " +
+				"FROM menu AS m " +
+				"WHERE m.name = '" + menuName + "'", columnTypeMap);
+
+		for(Map<String, Object> rowMap : dbQuery.getResultList()) {
+
+			menu.setId((Integer)rowMap.get("id"));
+			menu.setLabel((String)rowMap.get("label"));
+			menu.setPageId((Integer)rowMap.get("pageId"));
+			menu.setActive((Boolean)rowMap.get("active"));
+		}
 
 		return menu;
 	}
