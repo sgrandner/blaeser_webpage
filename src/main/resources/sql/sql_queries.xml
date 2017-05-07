@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sqltemplate name="query1">
+	SELECT p.id
+	FROM page AS p
+	WHERE p.name = 'concerts'
+</sqltemplate>

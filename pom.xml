@@ -132,6 +132,20 @@
 		</dependency>
 	</dependencies>
 
+	<!-- TODO for staging and production !? -->
+	<!--<distributionManagement>-->
+		<!--<repository>-->
+			<!--<id>localRepository</id>-->
+			<!--<name>My local repository</name>-->
+			<!--<url>http://127.0.0.1:8080/blaeser_webapp/repositories/releases/</url>-->
+		<!--</repository>-->
+		<!--<snapshotRepository>-->
+			<!--<id>MylocalSnap</id>-->
+			<!--<name>RepositoryProxySnap</name>-->
+			<!--<url>http://127.0.0.1:8080/blaeser_webapp/repositories/snapshots/</url>-->
+		<!--</snapshotRepository>-->
+	<!--</distributionManagement>-->
+
 	<build>
 		<finalName>stack</finalName>
 
@@ -139,21 +153,37 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>2.5</version>
+				<version>3.0.0</version>
 			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.2</version>
+				<version>3.6.1</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
 			</plugin>
 
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.2</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.8.2</version>
+			</plugin>
+
 			<!--<plugin>-->
-				<!-- TODO ????? -->
+				<!--<groupId>org.codelibs</groupId>-->
+				<!--<artifactId>tomcat8-maven-plugin</artifactId>-->
+				<!--<version>3.0</version>-->
+			<!--</plugin>-->
+			<!--<plugin>-->
 				<!--<groupId>org.apache.tomcat.maven</groupId>-->
 				<!--<artifactId>tomcat7-maven-plugin</artifactId>-->
 				<!--<version>2.2</version>-->

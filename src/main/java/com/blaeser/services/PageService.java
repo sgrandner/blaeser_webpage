@@ -1,12 +1,17 @@
 package com.blaeser.services;
 
-import com.blaeser.models.ColumnType;
-import com.blaeser.models.ContentImage;
-import com.blaeser.models.ContentText;
-import com.blaeser.models.Page;
+import com.blaeser.models.*;
+import org.w3c.dom.Document;
 
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
+import javax.xml.bind.JAXB;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -65,10 +70,25 @@ public class PageService {
 			conn = ds.getConnection();
 			st = conn.createStatement();
 
+			URL url = PageService.class.getResource("/sql/sql_queries.xml");
+			File file = new File(url.getFile());
+
+//			// DOM-Bäume einlesen mit JAXP:
+//			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//			DocumentBuilder builder = factory.newDocumentBuilder();
+//			Document document = builder.parse(file);
+
+			// Java Architecture for XML Binding (JAXB)
+			JAXBContext jaxbContext = JAXBContext.newInstance(SqlTemplate.class);
+			Marshaller marshaller = jaxbContext.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+			SqlTemplate sqlTemplate = JAXB.unmarshal(file, SqlTemplate.class);
+
+			String sqlTemplateStatement = sqlTemplate.getStatement();
+
 			// TODO check page.active here as well !?!
-			rs = st.executeQuery("SELECT p.id " +
-					"FROM page AS p " +
-					"WHERE p.name = '" + pageName + "'");
+			rs = st.executeQuery(sqlTemplateStatement);
 
 			while (rs.next()) {
 				pageId = rs.getInt("id");
