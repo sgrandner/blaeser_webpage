@@ -102,6 +102,9 @@ public class DbQuery {
 		return sb.toString();
 	}
 
+	// TODO instead of simple getter method implement type specific getter methods with an internal iterator
+	// in calling class:   while(get result row) get key as type
+
 	public List<Map<String, Object>> getResultList() {
 		return resultList;
 	}

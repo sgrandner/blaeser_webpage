@@ -1,15 +1,10 @@
 package com.blaeser.services;
 
 import com.blaeser.models.*;
-import org.w3c.dom.Document;
 
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
-import javax.xml.bind.JAXB;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.bind.*;
 import java.io.File;
 import java.net.URL;
 import java.sql.Connection;
@@ -54,53 +49,58 @@ public class PageService {
 
 	private Integer getPageIdByPageName(String pageName) {
 
-		Connection conn = null;
-		Statement st = null;
-		ResultSet rs = null;
 		Integer pageId = null;
 
 		try {
-			InitialContext ctx = new InitialContext();
-			DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/TestDB");
-
-			// This works too
-			// Context envCtx = (Context) ctx.lookup("java:comp/env");
-			// DataSource ds = (DataSource) envCtx.lookup("jdbc/TestDB");
-
-			conn = ds.getConnection();
-			st = conn.createStatement();
 
 			URL url = PageService.class.getResource("/sql/sql_queries.xml");
 			File file = new File(url.getFile());
 
-//			// DOM-Bäume einlesen mit JAXP:
-//			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//			DocumentBuilder builder = factory.newDocumentBuilder();
-//			Document document = builder.parse(file);
-
+			// TODO make singleton class for sqlTemplates and get instance in DbQuery
 			// Java Architecture for XML Binding (JAXB)
-			JAXBContext jaxbContext = JAXBContext.newInstance(SqlTemplate.class);
-			Marshaller marshaller = jaxbContext.createMarshaller();
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			JAXBContext jaxbContext = JAXBContext.newInstance("com.blaeser.models");
 
-			SqlTemplate sqlTemplate = JAXB.unmarshal(file, SqlTemplate.class);
+			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 
-			String sqlTemplateStatement = sqlTemplate.getStatement();
+			JAXBElement<SqlTemplateGroupType> sqlTemplateGroup = (JAXBElement<SqlTemplateGroupType>)unmarshaller.unmarshal(file);
+
+			Map<String, String> sqlTemplateMap = new HashMap<>();
+
+			for(SqlTemplateType sqlTemplate : sqlTemplateGroup.getValue().getSqlTemplate()) {
+
+				sqlTemplateMap.put(sqlTemplate.getName(), sqlTemplate.getValue());
+			}
+
+			DbQuery dbQuery = new DbQuery();
+			Map<String, ColumnType> columnTypeMap = new HashMap<>();
+			columnTypeMap.clear();
+			columnTypeMap.put("id", ColumnType.INT);
 
 			// TODO check page.active here as well !?!
-			rs = st.executeQuery(sqlTemplateStatement);
 
-			while (rs.next()) {
-				pageId = rs.getInt("id");
+			Matcher matcher = Pattern.compile("\\?").matcher(sqlTemplateMap.get("selectPageIdByPageName"));
+
+			StringBuffer processedSqlTemplate = new StringBuffer();
+			while(matcher.find()) {
+
+				try {
+					matcher.appendReplacement(processedSqlTemplate, pageName);
+				}
+				catch (Exception ex) {
+					ex.printStackTrace();
+				}
+
+				matcher.appendTail(processedSqlTemplate);
+			}
+
+			dbQuery.executeStatement(processedSqlTemplate.toString(), columnTypeMap);
+
+			for(Map<String, Object> rowMap : dbQuery.getResultList()) {
+				pageId = (Integer)rowMap.get("id");
 			}
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
-		}
-		finally {
-			try { if (rs != null) rs.close(); } catch (SQLException e) { e.printStackTrace(); }
-			try { if (st != null) st.close(); } catch (SQLException e) { e.printStackTrace(); }
-			try { if (conn != null) conn.close(); } catch (SQLException e) { e.printStackTrace(); }
 		}
 
 		return pageId;

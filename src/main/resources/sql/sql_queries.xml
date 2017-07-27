@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<sqltemplate name="query1">
-	SELECT p.id
-	FROM page AS p
-	WHERE p.name = 'concerts'
-</sqltemplate>
+<sqlTemplateGroup>
+
+	<sqlTemplate name="selectPageIdByPageName">
+		SELECT p.id
+		FROM page AS p
+		WHERE p.name = '?'
+	</sqlTemplate>
+
+	<sqlTemplate name="query2">
+		SELECT * 
+		FROM page AS p
+		INNER JOIN page_template AS pt
+		ON p.templateId = pt.id
+		WHERE p.id = 2
+		AND p.active = 1
+	</sqlTemplate>
+
+</sqlTemplateGroup>
