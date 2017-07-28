@@ -3,9 +3,6 @@ package com.blaeser.services;
 import com.blaeser.models.ColumnType;
 import com.blaeser.models.Menu;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class MenuService {
 
 	public Menu createMenu(String menuName) {
@@ -27,26 +24,22 @@ public class MenuService {
 	private Menu getMenuData(String menuName) {
 
 		Menu menu = new Menu();
-
 		DbQuery dbQuery = new DbQuery();
-		Map<String, ColumnType> columnTypeMap = new HashMap<>();
 
-		columnTypeMap.clear();
-		columnTypeMap.put("id", ColumnType.INT);
-		columnTypeMap.put("label", ColumnType.STRING);
-		columnTypeMap.put("pageId", ColumnType.INT);
-		columnTypeMap.put("active", ColumnType.BOOLEAN);
+		dbQuery.clear();
+		dbQuery.setColumnType("id", ColumnType.INT);
+		dbQuery.setColumnType("label", ColumnType.STRING);
+		dbQuery.setColumnType("pageId", ColumnType.INT);
+		dbQuery.setColumnType("active", ColumnType.BOOLEAN);
 
-		dbQuery.executeStatement("SELECT m.id, m.label, m.pageId, m.active " +
-				"FROM menu AS m " +
-				"WHERE m.name = '" + menuName + "'", columnTypeMap);
+		dbQuery.query("selectMenuDataByMenuName", menuName);
 
-		for(Map<String, Object> rowMap : dbQuery.getResultList()) {
+		while(dbQuery.readResults()) {
 
-			menu.setId((Integer)rowMap.get("id"));
-			menu.setLabel((String)rowMap.get("label"));
-			menu.setPageId((Integer)rowMap.get("pageId"));
-			menu.setActive((Boolean)rowMap.get("active"));
+			menu.setId(dbQuery.getValueAsInteger("id"));
+			menu.setLabel(dbQuery.getValueAsString("label"));
+			menu.setPageId(dbQuery.getValueAsInteger("pageId"));
+			menu.setActive(dbQuery.getValueAsBoolean("active"));
 		}
 
 		return menu;

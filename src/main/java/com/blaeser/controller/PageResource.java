@@ -8,17 +8,11 @@ import com.blaeser.services.MenuService;
 import com.blaeser.services.PageService;
 import org.glassfish.jersey.server.mvc.Viewable;
 
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -74,28 +68,26 @@ public class PageResource {
 	public Response dataPage() {
 
 		StringBuffer sb = new StringBuffer();
-
 		DbQuery dbQuery = new DbQuery();
-		Map<String, ColumnType> columnTypeMap = new HashMap<>();
 
 		// first data set
-		columnTypeMap.clear();
-		columnTypeMap.put("id", ColumnType.INT);
-		columnTypeMap.put("name", ColumnType.STRING);
-		columnTypeMap.put("active", ColumnType.BOOLEAN);
-		columnTypeMap.put("creationDate", ColumnType.DATE);
+		dbQuery.clear();
+		dbQuery.setColumnType("id", ColumnType.INT);
+		dbQuery.setColumnType("name", ColumnType.STRING);
+		dbQuery.setColumnType("active", ColumnType.BOOLEAN);
+		dbQuery.setColumnType("creationDate", ColumnType.DATE);
 
-		dbQuery.executeStatement("SELECT * FROM page", columnTypeMap);
+		dbQuery.query("selectPages");
 
 		sb.append(dbQuery.toString());
 		sb.append("<br/><br/>");
 
 		// second data set
-		columnTypeMap.clear();
-		columnTypeMap.put("name", ColumnType.STRING);
-		columnTypeMap.put("creationDate", ColumnType.DATE);
+		dbQuery.clear();
+		dbQuery.setColumnType("name", ColumnType.STRING);
+		dbQuery.setColumnType("creationDate", ColumnType.DATE);
 
-		dbQuery.executeStatement("SELECT name, creationDate FROM page WHERE creationDate > '2016-11-01 00:00:00'", columnTypeMap);
+		dbQuery.query("testSelectPagesLaterThanCreationDate", "2016-11-01 00:00:00");
 
 		sb.append(dbQuery.toString());
 

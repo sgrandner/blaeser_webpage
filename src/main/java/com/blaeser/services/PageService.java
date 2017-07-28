@@ -2,15 +2,6 @@ package com.blaeser.services;
 
 import com.blaeser.models.*;
 
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
-import javax.xml.bind.*;
-import java.io.File;
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -53,50 +44,14 @@ public class PageService {
 
 		try {
 
-			URL url = PageService.class.getResource("/sql/sql_queries.xml");
-			File file = new File(url.getFile());
-
-			// TODO make singleton class for sqlTemplates and get instance in DbQuery
-			// Java Architecture for XML Binding (JAXB)
-			JAXBContext jaxbContext = JAXBContext.newInstance("com.blaeser.models");
-
-			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-
-			JAXBElement<SqlTemplateGroupType> sqlTemplateGroup = (JAXBElement<SqlTemplateGroupType>)unmarshaller.unmarshal(file);
-
-			Map<String, String> sqlTemplateMap = new HashMap<>();
-
-			for(SqlTemplateType sqlTemplate : sqlTemplateGroup.getValue().getSqlTemplate()) {
-
-				sqlTemplateMap.put(sqlTemplate.getName(), sqlTemplate.getValue());
-			}
-
 			DbQuery dbQuery = new DbQuery();
-			Map<String, ColumnType> columnTypeMap = new HashMap<>();
-			columnTypeMap.clear();
-			columnTypeMap.put("id", ColumnType.INT);
 
-			// TODO check page.active here as well !?!
+			dbQuery.setColumnType("id", ColumnType.INT);
+			dbQuery.query("selectPageIdByPageName", pageName);
 
-			Matcher matcher = Pattern.compile("\\?").matcher(sqlTemplateMap.get("selectPageIdByPageName"));
+			while(dbQuery.readResults()) {
 
-			StringBuffer processedSqlTemplate = new StringBuffer();
-			while(matcher.find()) {
-
-				try {
-					matcher.appendReplacement(processedSqlTemplate, pageName);
-				}
-				catch (Exception ex) {
-					ex.printStackTrace();
-				}
-
-				matcher.appendTail(processedSqlTemplate);
-			}
-
-			dbQuery.executeStatement(processedSqlTemplate.toString(), columnTypeMap);
-
-			for(Map<String, Object> rowMap : dbQuery.getResultList()) {
-				pageId = (Integer)rowMap.get("id");
+				pageId = dbQuery.getValueAsInteger("id");
 			}
 		}
 		catch (Exception ex) {
@@ -109,88 +64,72 @@ public class PageService {
 	private Page getPageData(int pageId) {
 
 		Page page = new Page();
-
 		DbQuery dbQuery = new DbQuery();
-		Map<String, ColumnType> columnTypeMap = new HashMap<>();
 
-		// get page data
-		columnTypeMap.clear();
-		columnTypeMap.put("id", ColumnType.INT);
-		columnTypeMap.put("name", ColumnType.STRING);
-		columnTypeMap.put("active", ColumnType.BOOLEAN);
-		columnTypeMap.put("templateId", ColumnType.INT);
-		columnTypeMap.put("creationDate", ColumnType.DATE);
-		columnTypeMap.put("modifyDate", ColumnType.DATE);
-		columnTypeMap.put("template", ColumnType.STRING);
+		// get page and template
+		dbQuery.clear();
+		dbQuery.setColumnType("id", ColumnType.INT);
+		dbQuery.setColumnType("name", ColumnType.STRING);
+		dbQuery.setColumnType("active", ColumnType.BOOLEAN);
+		dbQuery.setColumnType("templateId", ColumnType.INT);
+		dbQuery.setColumnType("creationDate", ColumnType.DATE);
+		dbQuery.setColumnType("modifyDate", ColumnType.DATE);
+		dbQuery.setColumnType("template", ColumnType.STRING);
 
-		dbQuery.executeStatement("SELECT * " +
-				"FROM page AS p " +
-				"INNER JOIN page_template AS pt " +
-				"ON p.templateId = pt.id " +
-				"WHERE p.id = " + pageId + " " +
-				"AND p.active = 1 ", columnTypeMap);
+		dbQuery.query("selectPageAndTemplateByPageId", pageId);
 
-		for(Map<String, Object> rowMap : dbQuery.getResultList()) {
-
-			page.setId((Integer)rowMap.get("id"));
-			page.setName((String)rowMap.get("name"));
-			page.setActive((Boolean)rowMap.get("active"));
-			page.setTemplateId((Integer)rowMap.get("templateId"));
-			page.setCreationDate((Date)rowMap.get("creationDate"));
-			page.setModifyDate((Date)rowMap.get("modifyDate"));
-			page.setTemplate((String)rowMap.get("template"));
+		while(dbQuery.readResults()) {
+			page.setId(dbQuery.getValueAsInteger("id"));
+			page.setName(dbQuery.getValueAsString("name"));
+			page.setActive(dbQuery.getValueAsBoolean("active"));
+			page.setTemplateId(dbQuery.getValueAsInteger("templateId"));
+			page.setCreationDate(dbQuery.getValueAsDate("creationDate"));
+			page.setModifyDate(dbQuery.getValueAsDate("modifyDate"));
+			page.setTemplate(dbQuery.getValueAsString("template"));
 		}
 
-		// get image data for page
-		columnTypeMap.clear();
-		columnTypeMap.put("id", ColumnType.INT);
-		columnTypeMap.put("fileName", ColumnType.STRING);
-		columnTypeMap.put("width", ColumnType.INT);
-		columnTypeMap.put("height", ColumnType.INT);
-		columnTypeMap.put("description", ColumnType.STRING);
+		// get images for page
+		dbQuery.clear();
+		dbQuery.setColumnType("id", ColumnType.INT);
+		dbQuery.setColumnType("fileName", ColumnType.STRING);
+		dbQuery.setColumnType("width", ColumnType.INT);
+		dbQuery.setColumnType("height", ColumnType.INT);
+		dbQuery.setColumnType("description", ColumnType.STRING);
 
-		dbQuery.executeStatement("SELECT * " +
-				"FROM page_content AS pc " +
-				"INNER JOIN image AS i " +
-				"ON pc.refid = i.id " +
-				"WHERE pc.pageId = " + page.getId() + " " +
-				"AND pc.type = 1 ", columnTypeMap);
+		dbQuery.query("selectImagesByPageId", pageId);
 
 		List<ContentImage> images = new ArrayList<ContentImage>();
 
-		for(Map<String, Object> rowMap : dbQuery.getResultList()) {
+		while(dbQuery.readResults()) {
 
 			ContentImage image = new ContentImage();
-			image.setId((Integer)rowMap.get("id"));
-			image.setFileName((String)rowMap.get("fileName"));
-			image.setWidth((Integer)rowMap.get("width"));
-			image.setHeight((Integer)rowMap.get("height"));
-			image.setDescription((String)rowMap.get("description"));
+
+			image.setId(dbQuery.getValueAsInteger("id"));
+			image.setFileName(dbQuery.getValueAsString("fileName"));
+			image.setWidth(dbQuery.getValueAsInteger("width"));
+			image.setHeight(dbQuery.getValueAsInteger("height"));
+			image.setDescription(dbQuery.getValueAsString("description"));
 
 			images.add(image);
 		}
 
 		page.setImages(images);
 
-		// get text data for page
-		columnTypeMap.clear();
-		columnTypeMap.put("id", ColumnType.INT);
-		columnTypeMap.put("content", ColumnType.STRING);
+		// get texts for page
+		dbQuery.clear();
+		dbQuery.setColumnType("id", ColumnType.INT);
+		dbQuery.setColumnType("content", ColumnType.STRING);
 
-		dbQuery.executeStatement("SELECT * " +
-				"FROM page_content AS pc " +
-				"INNER JOIN text AS t " +
-				"ON pc.refid = t.id " +
-				"WHERE pc.pageId = " + page.getId() + " " +
-				"AND pc.type = 0", columnTypeMap);
+		dbQuery.query("selectTextsByPageId", pageId);
 
 		List<ContentText> texts = new ArrayList<ContentText>();
 
-		for(Map<String, Object> rowMap : dbQuery.getResultList()) {
+		while(dbQuery.readResults()) {
 
 			ContentText text = new ContentText();
-			text.setId((Integer)rowMap.get("id"));
-			text.setContent((String)rowMap.get("content"));
+
+			text.setId(dbQuery.getValueAsInteger("id"));
+			text.setContent(dbQuery.getValueAsString("content"));
 
 			texts.add(text);
 		}

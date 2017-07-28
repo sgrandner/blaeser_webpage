@@ -2,19 +2,54 @@
 
 <sqlTemplateGroup>
 
+	<sqlTemplate name="selectPages">
+		SELECT *
+		FROM page
+	</sqlTemplate>
+
+	<sqlTemplate name="testSelectPagesLaterThanCreationDate">
+		SELECT name, creationDate
+		FROM page
+		WHERE creationDate > '?'
+	</sqlTemplate>
+
 	<sqlTemplate name="selectPageIdByPageName">
 		SELECT p.id
 		FROM page AS p
 		WHERE p.name = '?'
 	</sqlTemplate>
 
-	<sqlTemplate name="query2">
+	<sqlTemplate name="selectPageAndTemplateByPageId">
 		SELECT * 
 		FROM page AS p
 		INNER JOIN page_template AS pt
 		ON p.templateId = pt.id
-		WHERE p.id = 2
+		WHERE p.id = ?
 		AND p.active = 1
+	</sqlTemplate>
+
+	<sqlTemplate name="selectImagesByPageId">
+		SELECT *
+		FROM page_content AS pc
+		INNER JOIN image AS i
+		ON pc.refid = i.id
+		WHERE pc.pageId = ?
+		AND pc.type = 1
+	</sqlTemplate>
+
+	<sqlTemplate name="selectTextsByPageId">
+		SELECT *
+		FROM page_content AS pc
+		INNER JOIN text AS t
+		ON pc.refid = t.id
+		WHERE pc.pageId = ?
+		AND pc.type = 0
+	</sqlTemplate>
+
+	<sqlTemplate name="selectMenuDataByMenuName">
+		SELECT m.id, m.label, m.pageId, m.active
+		FROM menu AS m
+		WHERE m.name = '?'
 	</sqlTemplate>
 
 </sqlTemplateGroup>

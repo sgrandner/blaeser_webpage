@@ -8,16 +8,61 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DbQuery {
 
 	private List<Map<String, Object>> resultList = new ArrayList<>();
+	private Map<String, ColumnType> columnTypeMap = new HashMap<>();
+	private Integer rowIterator = null;
 
-	public void executeStatement(String statementString, Map<String, ColumnType> columnTypeMap) {
+	public void setColumnType(String columnName, ColumnType columnType) {
+
+		columnTypeMap.put(columnName, columnType);
+	}
+
+	public void clear() {
+
+		resultList.clear();
+		columnTypeMap.clear();
+		rowIterator = null;
+	}
+
+	public void query(String templateName, Object... params) {
+
+		StringBuffer processedSqlTemplate = new StringBuffer();
+
+		String template = SqlTemplateManager.getInstance().getSqlTemplateMap().get(templateName);
+		Matcher matcher = Pattern.compile("\\?").matcher(template);
+
+		int index = 0;
+		List<Object> paramList = new ArrayList<>();
+		Collections.addAll(paramList, params);
+
+		try {
+
+			while(matcher.find()) {
+				Object param = paramList.get(index++);
+				matcher.appendReplacement(processedSqlTemplate, param.toString());
+			}
+
+			matcher.appendTail(processedSqlTemplate);
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		if(index != paramList.size()) {
+			// TODO error logging
+		}
+
+		executeStatement(processedSqlTemplate.toString(), columnTypeMap);
+	}
+
+	private void executeStatement(String statementString, Map<String, ColumnType> columnTypeMap) {
 
 		resultList.clear();
 
@@ -102,10 +147,42 @@ public class DbQuery {
 		return sb.toString();
 	}
 
-	// TODO instead of simple getter method implement type specific getter methods with an internal iterator
-	// in calling class:   while(get result row) get key as type
+	public boolean readResults() {
 
-	public List<Map<String, Object>> getResultList() {
-		return resultList;
+		if(rowIterator == null) {
+			rowIterator = 0;
+		}
+		else {
+			rowIterator++;
+		}
+
+		return rowIterator < resultList.size();
+	}
+
+	private Object getValue(String columnName) {
+
+		return resultList.get(rowIterator).get(columnName);
+	}
+
+	public String getValueAsString(String columnName) {
+
+		return getValue(columnName).toString();
+	}
+
+	public Integer getValueAsInteger(String columnName) {
+
+		return Integer.parseInt(getValue(columnName).toString());
+	}
+
+	// TODO
+
+	public Boolean getValueAsBoolean(String columnName) {
+
+		return getValue(columnName).toString().equals("1");
+	}
+
+	public Date getValueAsDate(String columnName) {
+
+		return (Date)getValue(columnName);
 	}
 }
