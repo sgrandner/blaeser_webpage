@@ -26,13 +26,15 @@ public class MenuService {
 
 			MenuItem menuItem = new MenuItem();
 
+			menuItem.setName(dbQuery.getValueAsString("name"));
 			menuItem.setLabel(dbQuery.getValueAsString("label"));
 			menuItem.setPageId(dbQuery.getValueAsInteger("pageId"));
 			menuItem.setActive(dbQuery.getValueAsBoolean("active"));
 
 			menu.addMenuItem(menuItem);
 
-			if(dbQuery.getValueAsString("name").equals(selectedMenuName)) {
+			if(menuItem.getName().equals(selectedMenuName)) {
+				menuItem.setSelected(true);
 				selectedPageId = menuItem.getPageId();
 			}
 		}

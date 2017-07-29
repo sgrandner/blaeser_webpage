@@ -2,7 +2,6 @@ package com.blaeser.controller;
 
 import com.blaeser.models.ColumnType;
 import com.blaeser.models.Menu;
-import com.blaeser.models.MenuItem;
 import com.blaeser.models.Page;
 import com.blaeser.services.DbQuery;
 import com.blaeser.services.MenuService;
@@ -30,7 +29,7 @@ public class PageResource {
 	@GET
 	@Path("{menuName}")
 	@Produces("text/html")
-	public Viewable getPageByMenuName(@PathParam("menuName") String menuName) {
+	public Response getPageByMenuName(@PathParam("menuName") String menuName) {
 
 		MenuService menuService = new MenuService();
 		PageService pageService = new PageService();
@@ -44,13 +43,13 @@ public class PageResource {
 
 		// TODO case page == null !!!
 
-		return new Viewable("/page", modelMap);
+		return Response.ok(new Viewable("/page", modelMap)).build();
 	}
 
 	@GET
 	@Path("p/{pageName}")
 	@Produces("text/html")
-	public Viewable getPageByPageName(@PathParam("pageName") String pageName) {
+	public Response getPageByPageName(@PathParam("pageName") String pageName) {
 
 		PageService pageService = new PageService();
 
@@ -61,7 +60,7 @@ public class PageResource {
 
 		// TODO case page == null !!!
 
-		return new Viewable("/page", modelMap);
+		return Response.ok(new Viewable("/page", modelMap)).build();
 	}
 
 	// test data

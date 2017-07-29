@@ -21,6 +21,14 @@
 			<param-name>javax.ws.rs.Application</param-name>
 			<param-value>com.blaeser.controller.JAXRSConfiguration</param-value>
 		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.JSPTemplatesBasePath</param-name>
+			<param-value>/WEB-INF/jsp</param-value>
+		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.WebPageContentRegex</param-name>
+			<param-value>/(images|js|styles|(WEB-INF/jsp))/.*</param-value>
+		</init-param>
 		<!--<init-param>-->
 			<!--<param-name>jersey.config.servlet.filter.forwardOn404</param-name>-->
 			<!--<param-value>true</param-value>-->
