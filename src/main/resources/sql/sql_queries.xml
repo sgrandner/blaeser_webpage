@@ -46,8 +46,13 @@
 		AND pc.type = 0
 	</sqlTemplate>
 
+	<sqlTemplate name="selectMenus">
+		SELECT m.id, m.name, m.label, m.pageId, m.active
+		FROM menu AS m
+	</sqlTemplate>
+
 	<sqlTemplate name="selectMenuDataByMenuName">
-		SELECT m.id, m.label, m.pageId, m.active
+		SELECT m.id, m.name, m.label, m.pageId, m.active
 		FROM menu AS m
 		WHERE m.name = '?'
 	</sqlTemplate>

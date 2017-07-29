@@ -1,50 +1,41 @@
 package com.blaeser.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Menu {
 
-	private int id;
-	private String label;
-	private Integer pageId;
-	private Boolean active;
-	private String html;
+	private List<MenuItem> menuItemList = new ArrayList<>();
+	private Integer selectedPageId;
 
-	public int getId() {
-		return id;
+	public void addMenuItem(MenuItem menuItem) {
+
+		menuItemList.add(menuItem);
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void clear() {
+
+		menuItemList.clear();
 	}
 
-	public String getLabel() {
-		return label;
+	public int size() {
+
+		return menuItemList.size();
 	}
 
-	public void setLabel(String label) {
-		this.label = label;
+	public List<MenuItem> getMenuItemList() {
+		return menuItemList;
 	}
 
-	public Integer getPageId() {
-		return pageId;
+	public void setMenuItemList(List<MenuItem> menuItemList) {
+		this.menuItemList = menuItemList;
 	}
 
-	public void setPageId(Integer pageId) {
-		this.pageId = pageId;
+	public Integer getSelectedPageId() {
+		return selectedPageId;
 	}
 
-	public Boolean getActive() {
-		return active;
-	}
-
-	public void setActive(Boolean active) {
-		this.active = active;
-	}
-
-	public String getHtml() {
-		return html;
-	}
-
-	public void setHtml(String html) {
-		this.html = html;
+	public void setSelectedPageId(Integer selectedPageId) {
+		this.selectedPageId = selectedPageId;
 	}
 }

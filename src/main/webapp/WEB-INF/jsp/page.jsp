@@ -16,22 +16,9 @@
 
 <body>
 
-	<p>Das ist meine erste jsp-Seite :)</p>
+	${menu.menuItemList}
 
-	<p>-------------------</p>
-
-	<p>
-		${menu.label}
-	</p>
-	<p>
-		${menu.html}
-	</p>
-
-	<p>-------------------</p>
-
-	<p>
-		${page.html}
-	</p>
+	${page.html}
 
 </body>
 </html>

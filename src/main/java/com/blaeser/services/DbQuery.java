@@ -87,35 +87,35 @@ public class DbQuery {
 
 				Map<String, Object> rowMap = new HashMap<String, Object>();
 
-				for(String key : columnTypeMap.keySet()) {
+				for(String columnName : columnTypeMap.keySet()) {
 
 					Object value = null;
 
-					switch (columnTypeMap.get(key)) {
+					switch (columnTypeMap.get(columnName)) {
 						case STRING:
-							value = rs.getString(key);
+							value = rs.getString(columnName);
 							break;
 						case INT:
-							value = rs.getInt(key);
+							value = rs.getInt(columnName);
 							break;
 						case LONG:
-							value = rs.getLong(key);
+							value = rs.getLong(columnName);
 							break;
 						case FLOAT:
-							value = rs.getFloat(key);
+							value = rs.getFloat(columnName);
 							break;
 						case DOUBLE:
-							value = rs.getDouble(key);
+							value = rs.getDouble(columnName);
 							break;
 						case BOOLEAN:
-							value = rs.getBoolean(key);
+							value = rs.getBoolean(columnName);
 							break;
 						case DATE:
-							value = rs.getDate(key);
+							value = rs.getDate(columnName);
 							break;
 					}
 
-					rowMap.put(key, value);
+					rowMap.put(columnName, value);
 				}
 
 				resultList.add(rowMap);
