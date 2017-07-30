@@ -29,6 +29,10 @@ public class PageService {
 
 	public Page createPage(String pageName) {
 
+		if(pageName == null) {
+			return null;
+		}
+
 		Integer pageId = getPageIdByPageName(pageName);
 
 		if(pageId != null) {
@@ -200,5 +204,74 @@ public class PageService {
 		}
 
 		return sb.toString();
+	}
+
+	public PageTemplate loadPageTemplate(String pageTemplateName) {
+
+		if(pageTemplateName == null) {
+			return null;
+		}
+
+		Integer pageTemplateId = getPageTemplateIdByPageTemplateName(pageTemplateName);
+
+		if(pageTemplateId != null) {
+
+			PageTemplate pageTemplate = getPageTemplateData(pageTemplateId);
+
+			if(pageTemplate != null) {
+				return pageTemplate;
+			}
+		}
+
+		return null;
+	}
+
+	private Integer getPageTemplateIdByPageTemplateName(String pageTemplateName) {
+
+		DbQuery dbQuery = new DbQuery();
+		dbQuery.setColumnType("id", ColumnType.INT);
+		dbQuery.query("selectPageTemplateIdByPageTemplateName", pageTemplateName);
+
+		if(dbQuery.size() != 1) {
+			// TODO log error
+		}
+
+		Integer pageTemplateId = null;
+
+		while(dbQuery.readResults()) {
+			pageTemplateId = dbQuery.getValueAsInteger("id");
+		}
+
+		return pageTemplateId;
+	}
+
+	private PageTemplate getPageTemplateData(Integer pageTemplateId) {
+
+		DbQuery dbQuery = new DbQuery();
+
+		dbQuery.setColumnType("id", ColumnType.INT);
+		dbQuery.setColumnType("name", ColumnType.STRING);
+		dbQuery.setColumnType("template", ColumnType.STRING);
+		dbQuery.setColumnType("creationDate", ColumnType.DATE);
+		dbQuery.setColumnType("modifyDate", ColumnType.DATE);
+
+		dbQuery.query("selectPageTemplateById", pageTemplateId);
+
+		if(dbQuery.size() != 1) {
+			// TODO log error
+		}
+
+		PageTemplate pageTemplate = new PageTemplate();
+
+		while(dbQuery.readResults()) {
+
+			pageTemplate.setId(dbQuery.getValueAsInteger("id"));
+			pageTemplate.setName(dbQuery.getValueAsString("name"));
+			pageTemplate.setTemplate(dbQuery.getValueAsString("template"));
+			pageTemplate.setCreationDate(dbQuery.getValueAsDate("creationDate"));
+			pageTemplate.setModifyDate(dbQuery.getValueAsDate("modifyDate"));
+		}
+
+		return pageTemplate;
 	}
 }

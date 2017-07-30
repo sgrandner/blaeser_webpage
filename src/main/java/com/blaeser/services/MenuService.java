@@ -17,7 +17,7 @@ public class MenuService {
 		dbQuery.setColumnType("pageId", ColumnType.INT);
 		dbQuery.setColumnType("active", ColumnType.BOOLEAN);
 
-		dbQuery.query("selectMenus");
+		dbQuery.query("selectActiveMenus");
 
 		Menu menu = new Menu();
 		Integer selectedPageId = null;
@@ -46,5 +46,35 @@ public class MenuService {
 		menu.setSelectedPageId(selectedPageId);
 
 		return menu;
+	}
+
+	public MenuItem createMenuItem(String menuName) {
+
+		DbQuery dbQuery = new DbQuery();
+
+		dbQuery.clear();
+		dbQuery.setColumnType("id", ColumnType.INT);
+		dbQuery.setColumnType("name", ColumnType.STRING);
+		dbQuery.setColumnType("label", ColumnType.STRING);
+		dbQuery.setColumnType("pageId", ColumnType.INT);
+		dbQuery.setColumnType("active", ColumnType.BOOLEAN);
+
+		dbQuery.query("selectMenuDataByMenuName", menuName);
+
+		if(dbQuery.size() != 1) {
+			// TODO log error
+		}
+
+		MenuItem menuItem = new MenuItem();
+
+		while(dbQuery.readResults()) {
+
+			menuItem.setName(dbQuery.getValueAsString("name"));
+			menuItem.setLabel(dbQuery.getValueAsString("label"));
+			menuItem.setPageId(dbQuery.getValueAsInteger("pageId"));
+			menuItem.setActive(dbQuery.getValueAsBoolean("active"));
+		}
+
+		return menuItem;
 	}
 }

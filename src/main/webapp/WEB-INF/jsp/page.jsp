@@ -5,6 +5,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+<%--<jsp:useBean id="it" type="" />--%>
+
 <c:set var="menu" value="${it.menu}" />
 <c:set var="page" value="${it.page}" />
 
@@ -63,6 +65,9 @@
 				</c:choose>
 
 				<%-- TODO domain --%>
+				<%--<c:url ...--%>
+
+
 				<a href="http://localhost:8080/page/${menuItem.name}" class="menuLink ${menuSelected}">
 					<span class="menuEntry ${menuSelected}">
 						${menuItem.label}

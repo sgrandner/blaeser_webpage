@@ -31,6 +31,11 @@ public class DbQuery {
 		rowIterator = null;
 	}
 
+	public int size() {
+
+		return resultList.size();
+	}
+
 	public void query(String templateName, Object... params) {
 
 		StringBuffer processedSqlTemplate = new StringBuffer();
@@ -178,7 +183,7 @@ public class DbQuery {
 
 	public Boolean getValueAsBoolean(String columnName) {
 
-		return getValue(columnName).toString().equals("1");
+		return getValue(columnName).equals(true);
 	}
 
 	public Date getValueAsDate(String columnName) {

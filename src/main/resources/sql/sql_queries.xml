@@ -2,6 +2,7 @@
 
 <sqlTemplateGroup>
 
+	<!-- pages and content -->
 	<sqlTemplate name="selectPages">
 		SELECT *
 		FROM page
@@ -46,15 +47,48 @@
 		AND pc.type = 0
 	</sqlTemplate>
 
+
+	<!-- menus -->
 	<sqlTemplate name="selectMenus">
+		SELECT *
+		FROM menu AS m
+	</sqlTemplate>
+
+	<sqlTemplate name="selectActiveMenus">
 		SELECT m.id, m.name, m.label, m.pageId, m.active
 		FROM menu AS m
+		WHERE m.active = 1
 	</sqlTemplate>
 
 	<sqlTemplate name="selectMenuDataByMenuName">
 		SELECT m.id, m.name, m.label, m.pageId, m.active
 		FROM menu AS m
 		WHERE m.name = '?'
+	</sqlTemplate>
+
+	<sqlTemplate name="selectActiveMenuDataByMenuName">
+		SELECT m.id, m.name, m.label, m.pageId, m.active
+		FROM menu AS m
+		WHERE m.name = '?'
+	</sqlTemplate>
+
+
+	<!-- page templates -->
+	<sqlTemplate name="selectPageTemplates">
+		SELECT *
+		FROM page_template AS pt
+	</sqlTemplate>
+
+	<sqlTemplate name="selectPageTemplateIdByPageTemplateName">
+		SELECT pt.id
+		FROM page_template AS pt
+		WHERE pt.name = '?'
+	</sqlTemplate>
+
+	<sqlTemplate name="selectPageTemplateById">
+		SELECT *
+		FROM page_template AS pt
+		WHERE pt.id = ?
 	</sqlTemplate>
 
 </sqlTemplateGroup>

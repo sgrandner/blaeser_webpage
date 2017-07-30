@@ -23,7 +23,7 @@ public class PageResource {
 	@Produces("text/html")
 	public Response mainPage() {
 
-		return Response.ok("This is the mainpage.").build();
+		return getPageByMenuName("menu1");
 	}
 
 	@GET
@@ -73,7 +73,7 @@ public class PageResource {
 
 		// first data set
 		dbQuery.clear();
-		dbQuery.setColumnType("id", ColumnType.INT);
+		dbQuery.setColumnType("idd", ColumnType.INT);
 		dbQuery.setColumnType("name", ColumnType.STRING);
 		dbQuery.setColumnType("active", ColumnType.BOOLEAN);
 		dbQuery.setColumnType("creationDate", ColumnType.DATE);
