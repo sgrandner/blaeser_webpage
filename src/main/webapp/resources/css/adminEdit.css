@@ -1,0 +1,28 @@
+
+
+.adminMenu {
+	/*float: left;*/
+	width: 600px;
+	padding: 10px;
+	border: solid 1px #dddddd;
+}
+
+.adminMenu .headline {
+	font-weight: bold;
+}
+
+.adminMenuLink {
+	color: #0089ff;
+}
+
+
+
+.adminEdit {
+	width: 600px;
+	padding: 10px;
+	border: solid 1px #a4a4a4;
+}
+
+.adminEdit .pageHtml {
+	border: solid 2px #515bbb;
+}

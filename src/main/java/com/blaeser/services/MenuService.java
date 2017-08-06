@@ -69,6 +69,7 @@ public class MenuService {
 
 		while(dbQuery.readResults()) {
 
+			menuItem.setId(dbQuery.getValueAsInteger("id"));
 			menuItem.setName(dbQuery.getValueAsString("name"));
 			menuItem.setLabel(dbQuery.getValueAsString("label"));
 			menuItem.setPageId(dbQuery.getValueAsInteger("pageId"));

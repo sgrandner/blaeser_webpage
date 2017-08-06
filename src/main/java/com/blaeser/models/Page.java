@@ -33,10 +33,12 @@ public class Page {
 		this.name = name;
 	}
 
+	@Deprecated
 	public Boolean getActive() {
 		return active;
 	}
 
+	@Deprecated
 	public void setActive(Boolean active) {
 		this.active = active;
 	}

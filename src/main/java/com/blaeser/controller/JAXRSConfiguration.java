@@ -9,7 +9,9 @@ public class JAXRSConfiguration extends ResourceConfig {
 	public JAXRSConfiguration() {
 
 		register(JspMvcFeature.class);
-		property(JspMvcFeature.TEMPLATE_BASE_PATH, "/WEB-INF/jsp");
+
+		// NOTE properties replace web.xml entries
+//		property(JspMvcFeature.TEMPLATE_BASE_PATH, "/WEB-INF/jsp");		// use this if not defined in web.xml by init-param jersey.config.server.mvc.templateBasePath.jsp
 
 		register(PageResource.class);
 		register(AdminResource.class);

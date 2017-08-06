@@ -17,37 +17,13 @@
 <html>
 <head>
 
-	<style type="text/css">
+	<%-- NOTE ${pageContext.request.contextPath} also possible instead of c:url --%>
+	<link rel="stylesheet" href="<c:url value="/resources/css/adminEdit.css" />" type="text/css">
 
-		.adminMenu {
-			/*float: left;*/
-			width: 600px;
-			padding: 10px;
-			border: solid 1px #dddddd;
-		}
+	<script type="text/javascript" src="<c:url value="/resources/js/adminEdit.js" />"></script>
 
-		.adminMenu .headline {
-			font-weight: bold;
-		}
-
-		.adminMenuLink {
-			color: #0089ff;
-		}
-
-
-
-		.adminEdit {
-			width: 600px;
-			padding: 10px;
-			border: solid 1px #a4a4a4;
-		}
-
-		.adminEdit .pageHtml {
-			border: solid 2px #515bbb;
-		}
-
-	</style>
 </head>
+
 
 <body>
 
@@ -102,26 +78,28 @@
 
 	<c:if test="${menuItem ne null}">
 
-		<div class="adminEdit">
+		<form class="adminEdit" action="">
 
-			name: ${menuItem.name}<br>
-			label: ${menuItem.label}<br>
-			pageId: ${menuItem.pageId}<br>
+			id: ${menuItem.id}<br>
+			name: <input type="text" name="name${menuItem.id}" value="${menuItem.name}"><br>
+			label: <input type="text" name="label${menuItem.id}" value="${menuItem.label}"><br>
+			pageId: <input type="text" name="pageId${menuItem.id}" value="${menuItem.pageId}"><br>
 			active: ${menuItem.active}<br>
 			selected: ${menuItem.selected}<br>
 
-		</div>
+			<input type="submit" value="Speichern" onclick="editMenuItem.submitChanges()">
+
+		</form>
 
 	</c:if>
 
 	<c:if test="${page ne null}">
 
-		<div class="adminEdit">
+		<form class="adminEdit" action="">
 
 			id: ${page.id}<br>
-			name: ${page.name}<br>
-			active: ${page.active}<br>
-			templateId: ${page.templateId}<br>
+			name: <input type="text" name="name${page.id}" value="${page.name}"><br>
+			templateId: <input type="text" name="templateId${page.id}" value="${page.templateId}"><br>
 			creationDate: ${page.creationDate}<br>
 			modifyDate: ${page.modifyDate}<br>
 
@@ -133,32 +111,36 @@
 			images:
 			<div class="pageImages">
 				<c:forEach var="pageImageEntry" items="${page.images}">
-					${pageImageEntry.fileName}<br>
+					<input type="text" name="image${pageImageEntry.id}" value="${pageImageEntry.fileName}"><br>
 				</c:forEach>
 			</div>
 
 			texts:
 			<div class="pageTexts">
 				<c:forEach var="pageTextsEntry" items="${page.texts}">
-					${pageTextsEntry.content}<br><br>
+					<input type="text" name="text${pageTextsEntry.id}" value="${pageTextsEntry.content}"><br>
 				</c:forEach>
 			</div>
 
-		</div>
+			<input type="submit" value="Speichern" onclick="editPage.submitChanges()">
+
+		</form>
 
 	</c:if>
 
 	<c:if test="${pageTemplate ne null}">
 
-		<div class="adminEdit">
+		<form class="adminEdit" action="">
 
 			id: ${pageTemplate.id}<br>
-			name: ${pageTemplate.name}<br>
-			template: ${pageTemplate.template}<br>
+			name: <input type="text" name="name${pageTemplate.id}" value="${pageTemplate.name}"><br>
+			template: <input type="text" name="template${pageTemplate.id}" value="${pageTemplate.template}"><br>
 			creationDate: ${pageTemplate.creationDate}<br>
 			modifyDate: ${pageTemplate.modifyDate}<br>
 
-		</div>
+			<input type="submit" value="Speichern" onclick="editPageTemplate.submitChanges()">
+
+		</form>
 		
 	</c:if>
 

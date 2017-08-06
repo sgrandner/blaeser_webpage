@@ -2,11 +2,20 @@ package com.blaeser.models;
 
 public class MenuItem {
 
+	private Integer id;
 	private String name;
 	private String label;
 	private Integer pageId;
 	private Boolean active;
 	private Boolean selected;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return name;
